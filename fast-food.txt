@@ -1,0 +1,26 @@
+#
+# Sample data from http://mathbits.com/MathBits/TISection/Statistics1/LineFit.htm
+#
+# This data summarizes nutritional information for a variety of sandwiches, giving:
+#
+# Total fat (in grams) and total calories
+#
+# Is there a linear relationship between the fat and total calories in fast food?
+#
+# Using a graphing calculator, it is shown that a best fit line is given by
+#
+#    y = 11.73128088 x + 193.8521475
+#
+# Refer to the website above for more details.
+#
+9 260
+13 320
+21 420
+30 530
+31 560
+31 550
+34 590
+25 500
+28 560
+20 440
+5 300
