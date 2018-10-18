@@ -15,10 +15,13 @@ def create_list(file):
     """
     points = []
     for line in file:
-        # skip comments
-        if line[0] != '#':
-            # split at spaces (remove last char (newline))
-            line_vals = line[:-1].split(' ')
+        # skip comments and empty lines
+        if line[0] != '#' and line.strip():
+            # split at comma if csv, space otherwise (remove last char (newline))
+            if ',' in line:
+                line_vals = line[:-1].split(',')
+            else:
+                line_vals = line[:-1].split(' ')
             # remove empty elements in case more than one space was used as separator
             line_vals = list(filter(None, line_vals))
             # insert into list as tuple
@@ -121,4 +124,79 @@ def draw_regression_plot(points):
     :param points: list of tuples to process
     :return: None (draws a plot with turtle)
     """
-    plot_t = turtle.Turtle()
+    # init turtle and other things
+    t = turtle.Turtle()
+    w = turtle.Screen()
+    w.tracer(0)
+    w.title('Linear Regression Plot')
+
+    # get x and y values
+    x_vals = get_values(points,0)
+    y_vals = get_values(points,1)
+
+    # get min and maxes
+    min_x = min(x_vals)
+    max_x = max(x_vals)
+    min_y = min(y_vals)
+    max_y = max(y_vals)
+
+    # set turtle coordinates from those
+    # check min x
+    if min_x >= 0:
+        w_minx = 0
+    else:
+        w_minx = min_x-10
+    # check min y
+    if min_y >= 0:
+        w_miny = 0
+    else:
+        w_miny = min_y-10
+    # check max x
+    if max_x <= 0:
+        w_maxx = 0
+    else:
+        w_maxx = max_x+10
+    # check max y
+    if max_y <= 0:
+        w_maxy = 0
+    else:
+        w_maxy = max_y+10
+    w.setworldcoordinates(w_minx,w_miny,w_maxx,w_maxy)
+
+    # draw axis lines
+    t.pensize(2)
+    t.pencolor("black")
+    # x
+    t.up()
+    t.goto(w_minx,0)
+    t.down()
+    t.goto(w_maxx,0)
+    # y
+    t.up()
+    t.goto(0,w_miny)
+    t.down()
+    t.goto(0,w_maxy)
+
+    # plot points
+    t.up()
+    for point in points:
+        t.goto(point[0],point[1])
+        t.dot(5,"blue")
+
+    # plot regression line
+    fit_line_vals = generate_best_fit_line(points)
+    left_y = (fit_line_vals[0]*min_x) + fit_line_vals[1]
+    left_point = (min_x,left_y)
+    right_y = (fit_line_vals[0] * max_x) + fit_line_vals[1]
+    right_point = (max_x, right_y)
+    t.up()
+    t.goto(left_point)
+    t.pensize(2)
+    t.pencolor("red")
+    t.down()
+    t.goto(right_point)
+
+    # hide turtle, update, and don't exit
+    t.hideturtle()
+    w.update()
+    w.exitonclick()
